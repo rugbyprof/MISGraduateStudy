@@ -17,12 +17,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+
 
 # Importing the dataset; the goal here is to import the data from the CSV file 
 # and map the independent variables (X) to the dependent variable (Y)
 dataset = pd.read_csv('djita2_train.csv', delimiter=',', encoding='latin1', low_memory=False)
 dataset_test = pd.read_csv('djita2_test.csv', delimiter=',', encoding='latin1', low_memory=False)
 
+# New preprocessing method using MinMaxScaler to test training methods over the previous StandardScaler method.
 
 # Error on variable is "ndarray object of numpy module is not currently used" **Fixed with the help of Dr. Zhang
 X = dataset.iloc[:, 1:53].values 
@@ -40,13 +43,12 @@ y_test = dataset_test.iloc[:, 53:54].values
 # but I am open to suggestions.**Corrected with the help of Dr. Zhang.
 
 # Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X_train = sc.fit_transform(X)
-y_train = sc.fit_transform(y)
+mscaler = MinMaxScaler()
+X_train = mscaler.fit_transform(X)
+y_train = mscaler.fit_transform(y)
 
-X_test = sc.fit_transform(X_test)
-y_test = sc.fit_transform(y_test)
+X_test = mscaler.fit_transform(X_test)
+y_test = mscaler.fit_transform(y_test)
 
 # Imporing the Keras libraries and packages
 
