@@ -1,0 +1,3 @@
+A machine learning approach to using technical analysis in financial markets to make predictions on asset prices of equities. 
+By combining publicly-available daily stock price data with well-known neural network layers, we hope to find a new generality
+that can be applied to the components of the Dow Jones Industrial Index. 
