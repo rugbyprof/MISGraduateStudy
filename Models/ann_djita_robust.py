@@ -22,8 +22,8 @@ from sklearn.preprocessing import RobustScaler
 
 # Importing the dataset; the goal here is to import the data from the CSV file 
 # and map the independent variables (X) to the dependent variable (Y)
-dataset = pd.read_csv('djita2_train.csv', delimiter=',', encoding='latin1', low_memory=False)
-dataset_test = pd.read_csv('djita2_test.csv', delimiter=',', encoding='latin1', low_memory=False)
+dataset = pd.read_csv('\MISGraduateStudy\Data\djita2_train.csv', delimiter=',', encoding='latin1', low_memory=False)
+dataset_test = pd.read_csv('\MISGraduateStudy\Data\djita2_test.csv', delimiter=',', encoding='latin1', low_memory=False)
 
 # New preprocessing method using MinMaxScaler to test training methods over the previous StandardScaler method.
 
@@ -54,7 +54,7 @@ y_test = mscaler.fit_transform(y_test)
 
 import keras
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, LSTM
 
 # Initialising the ANN
 classifier = Sequential()
@@ -64,6 +64,9 @@ classifier.add(Dense(units = 152, kernel_initializer = 'uniform', activation = '
 
 # Adding the first second hidden layer
 classifier.add(Dense(units = 275, kernel_initializer = 'uniform', activation = 'tanh'))
+
+#Added Recurrent Layer to iterate over the dataset
+#classifier.add(LSTM(units = 25, return_sequences=True, input_shape=(20, 60))) #Won't work, input 0 is incompatible with lstm ndim
 
 # Adding the second hidden layer
 classifier.add(Dense(units = 198, kernel_initializer = 'uniform', activation = 'relu'))
@@ -78,7 +81,7 @@ classifier.add(Dense(units = 52, kernel_initializer = 'uniform', activation = 'r
 classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
 
 # Compiling the ANN
-classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+classifier.compile(optimizer = 'rmsprop', loss = 'mean_squared_error', metrics = ['accuracy'])
 
 # Fitting the ANN to the Training set
 classifier.fit(X_train, y_train, batch_size = 50, epochs = 100)
