@@ -23,6 +23,7 @@ xlsx = pd.ExcelFile('stocks1.xlsx')
 stex = pd.read_excel(xlsx, 'Dow-Issue Data', index_col=0, na_values=['NA'], parse_date=['date_strings'])
 stex.index = pd.to_datetime(stex.index)
 
+stex.info()
 
 #Descriptive Statistics on the dataset
 #stex.info()
@@ -43,6 +44,8 @@ num_class = 10 #number of possible classes for ranking
 # Then generalize all of the models by combining their signals from each training set. 
 
 model = Sequential()
+model.add(ConvLSTM2D(12, filters = 11, kernel_size = (1,12), padding = "same", return_sequences = True))
+layer_batch_normalization()
 model.add(LSTM(20, return_sequences=True, input_shape=(timesteps, data_dimensions)))
 model.add(LSTM(48, return_sequences=True))
 model.add(LSTM(18))
@@ -54,4 +57,4 @@ x = stex.iloc[:, :12]
 
 
 #Evaluate the model using the RMSE (Root mean squared error)
-rmse = math.sqrt(mean_squared_error(actual_close, predicted_close)
+#rmse = math.sqrt(mean_squared_error(actual_close, predicted_close)
