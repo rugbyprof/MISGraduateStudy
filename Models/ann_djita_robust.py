@@ -20,6 +20,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import RobustScaler
 
+
 # Importing the dataset; the goal here is to import the data from the CSV file 
 # and map the independent variables (X) to the dependent variable (Y)
 dataset = pd.read_csv('\MISGraduateStudy\Data\djita2_train.csv', delimiter=',', encoding='latin1', low_memory=False)
@@ -52,6 +53,7 @@ y_test = mscaler.fit_transform(y_test)
 
 # Imporing the Keras libraries and packages
 
+import tensorflow as tf 
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
@@ -60,34 +62,35 @@ from keras.layers import Dense, LSTM
 classifier = Sequential()
 
 # Adding the input layer and the first hidden layer
-classifier.add(Dense(units = 152, kernel_initializer = 'uniform', activation = 'relu', input_dim = 52))
+classifier.add(Dense(units = 100, kernel_initializer = 'VarianceScaling', activation = 'relu', input_dim = 52))
 
 # Adding the first second hidden layer
-classifier.add(Dense(units = 275, kernel_initializer = 'uniform', activation = 'tanh'))
+classifier.add(Dense(units = 200, activation = 'sigmoid'))
 
 #Added Recurrent Layer to iterate over the dataset
-#classifier.add(LSTM(units = 25, return_sequences=True, input_shape=(20, 60))) #Won't work, input 0 is incompatible with lstm ndim
+# classifier.add(LSTM(units = 275, input_dim=3, return_sequences=True)) #Won't work, input 0 is incompatible with lstm ndim
 
 # Adding the second hidden layer
-classifier.add(Dense(units = 198, kernel_initializer = 'uniform', activation = 'relu'))
+classifier.add(Dense(units = 100, kernel_initializer = 'uniform', activation = 'relu'))
 
 # Adding the third hidden layer - CMK2
-classifier.add(Dense(units = 225, kernel_initializer = 'uniform', activation = 'tanh'))
+classifier.add(Dense(units = 150, kernel_initializer = 'Orthogonal', activation = 'tanh'))
 
 # Adding the fourth hidden layer - CMK2
-classifier.add(Dense(units = 52, kernel_initializer = 'uniform', activation = 'relu'))
+classifier.add(Dense(units = 50, kernel_initializer = 'RandomNormal', activation = 'relu'))
 
 # Adding the output layer
-classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'linear'))
 
 # Compiling the ANN
-classifier.compile(optimizer = 'rmsprop', loss = 'mean_squared_error', metrics = ['accuracy'])
+classifier.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics=['mae', 'acc'])
 
 # Fitting the ANN to the Training set
 classifier.fit(X_train, y_train, batch_size = 50, epochs = 100)
 
 y_pred = classifier.predict(X_test)
-y_pred = (y_pred > 0.5)
+y_pred = (y_pred > 0.4)
+print(y_pred)
 
 # Part 3 - Making predictions and evaluating the model
 
@@ -97,6 +100,7 @@ y_pred = (y_pred > 0.5)
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
+'''
 # Evaluating the ANN
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import cross_val_score
@@ -146,3 +150,4 @@ grid_search = GridSearchCV(estimator = classifier,
 grid_search = grid_search.fit(X_train, y_train)
 best_parameters = grid_search.best_params_
 best_accuracy = grid_search.best_score_
+'''
