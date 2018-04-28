@@ -54,9 +54,13 @@ y_test = mscaler.fit_transform(y_test)
 # Imporing the Keras libraries and packages
 
 import tensorflow as tf 
+from keras.callbacks import TensorBoard
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
+from keras.utils.vis_utils import plot_model
+import pydot
+import graphviz
 
 # Initialising the ANN
 classifier = Sequential()
@@ -85,12 +89,14 @@ classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'li
 # Compiling the ANN
 classifier.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics=['mae', 'acc'])
 
+#Visualization in Real Time
+tensorboard = TensorBoard(log_dir="logs/{}", histogram_freq=0, write_graph=True, write_grads=False)
+                          
 # Fitting the ANN to the Training set
-classifier.fit(X_train, y_train, batch_size = 50, epochs = 100)
+classifier.fit(X_train, y_train, batch_size = 50, epochs = 100, verbose=1, callbacks=[tensorboard])
 
 y_pred = classifier.predict(X_test)
-y_pred = (y_pred > 0.4)
-print(y_pred)
+y_pred = (y_pred > 0.5)
 
 # Part 3 - Making predictions and evaluating the model
 
@@ -100,6 +106,9 @@ print(y_pred)
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
+#Visualizing the model
+keras.utils.print_summary(classifier, line_length=None, positions=None, print_fn=None)
+keras.utils.plot_model(classifier, to_file='model.png', show_shapes=False, show_layer_names=True, rankdir='TB')
 '''
 # Evaluating the ANN
 from keras.wrappers.scikit_learn import KerasClassifier
