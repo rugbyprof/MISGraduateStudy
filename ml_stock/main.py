@@ -1,11 +1,15 @@
 import pymysql.cursors
 import pprint as pp
+import json
+
+with open('config.json', encoding='utf-8') as data_file:
+   config = json.loads(data_file.read())
 
 # Connect to the database
-connection = pymysql.connect(host='cs2.mwsu.edu',
-                             user='stock_user',
-                             password='WeMg7jic5ysKzQNo',
-                             db='ml_stock',
+connection = pymysql.connect(host=config['host'],
+                             user=config['user'],
+                             password=config['password'],
+                             db=config['db'],
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
