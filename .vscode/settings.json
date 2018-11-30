@@ -1,4 +1,4 @@
 {
     "python.linting.enabled": false,
-    "python.pythonPath": "H:\\Anaconda\\python.exe"
+    "python.pythonPath": "~\\Anaconda3\\envs\\tf.py\\python.exe"
 }
