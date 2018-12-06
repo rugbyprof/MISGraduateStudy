@@ -40,9 +40,9 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 
 # Load the dataset through read_csv by placing header=0 and index_col='Date' or 1
 df = pd.read_csv('Copy of DowJonesComponentsDowIndexComp.csv', header=0, index_col=1) #Where the index_col[1] is equal to the index column of 0 in the dataset
-print(df.head(5))
-vals = df.values
-encode = LabelEncoder()
+print(df.head(5)) # Prints the first 5 rows of the csv
+vals = df.values # Creates a variable vals that contains the values of the columns
+encode = LabelEncoder() # LabelEncoder defines labels for the stock name
 vals[:,0] = encode.fit_transform(vals[:,0]) #Encodes the stock ticker as a value
 # Make sure all the data is float32
 vals = vals.astype('float32')
