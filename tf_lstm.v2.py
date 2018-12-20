@@ -3,7 +3,7 @@ from math import sqrt
 from numpy import argmax, array, concatenate
 from pandas import read_csv, DataFrame, concat
 from matplotlib import pyplot as plt
-from sklearn.preprocessing import LabelBinarizer, MinMaxScaler, LabelEncoder
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
@@ -71,11 +71,13 @@ print(train_x.shape, train_y.shape, test_x.shape, test_y.shape) #Expect (734001,
 
 # Fun part... finally. Design the network
 ledom = Sequential()
-ledom.add(LSTM(16, input_shape=(train_x.shape[1], train_x.shape[2])))
-ledom.add(Dense(1))
-ledom.compile(loss='mean_absolute_percentage_error', optimizer='adam')
+ledom.add(LSTM(16, input_shape=(train_x.shape[1], train_x.shape[2]), return_sequences=True)) #Layer returns full output sequences through 'return_sequences=True'
+ledom.add(LSTM(8)) #Drops the temporal dimension and creates a single vector containing 8 outputs from previous layer and pushes single vector to Dense output layer.
+ledom.add(Dense(1)) 
+ledom.compile(loss='mean_absolute_percentage_error', optimizer='adam', metrics=['acc'])
 # Fit network
-math = ledom.fit(train_x, train_y, epochs=50, batch_size=90, validation_data=(test_x, test_y), verbose=2, shuffle=False)
+math = ledom.fit(train_x, train_y, epochs=50, batch_size=90,
+                 validation_data=(test_x, test_y), verbose=2, shuffle=False)
 # Plot the fitting process. Without GPU, each epoch takes an average 30 seconds on my pc
 plt.plot(math.history['loss'], label='train')
 plt.plot(math.history['val_loss'], label='test')
