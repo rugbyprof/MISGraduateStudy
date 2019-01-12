@@ -98,3 +98,9 @@ inv_y = inv_y[:, 0]
 # Calculate the Root Mean Squared Error, have to import the sqrt function from python, keras library only has the mean squared error function
 rmse = sqrt(mean_squared_error(inv_y, inv_yhat))
 print('Test RMSE: %.3f' % rmse) #0.233 but I don't think this value has been inv_transformed under 10 epochs
+
+#Testing a new idea. 
+#Using the OHLC prices as input and the technical features like MACD, Bollinger, FG, and MA as output with the OHLC prices. 
+#Theory is that a simple MLP can perfectly predict these features because they are calculable. Once this neural net is trained, we can use the output from that model 
+#as input for the next model. There will be preprocessing of the output of the first model to create images that show OHLC, and the other technical indicators. 
+#I am wondering if it's possible to use several neural nets to preprocess the dataset and train it at the same time. This may be duplication. Just a thought. 
